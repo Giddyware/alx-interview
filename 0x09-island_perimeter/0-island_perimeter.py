@@ -1,43 +1,62 @@
 #!/usr/bin/python3
-"""Create a function def island_perimeter(grid):
-that returns the perimeter of the island described in grid:
-
-    - grid is a list of list of integers:
-       > 0 represents water
-       > 1 represents land
-       > Each cell is square, with a side length of 1
-       > Cells are connected horizontally/vertically (not diagonally).
-       > grid is rectangular, with its width and height
-        not exceeding 100
-    - The grid is completely surrounded by water
-    - There is only one island (or nothing).
-    - The island doesn’t have “lakes” (water inside that isn’t
-    connected to the water surrounding the island).
-"""
+'''0x09. Island Perimeter'''
 
 
 def island_perimeter(grid):
-    """Island Perimeter"""
-    visited = set()
+    '''returns the perimeter of the island described in grid'''
+    counter = 0
+    grid_max = len(grid) - 1  # index of the last list in the grid
+    lst_max = len(grid[0]) - 1  # index of the last square in list
 
-    # Depth first search function
-    def dfs(i, j):
-        # Base case
-        if i >= len(grid) or j >= len(grid[0]) or i < 0 or j < 0 or\
-                grid[i][j] == 0:
-            return 1
-        if (i, j) in visited:
-            return 0
+    for lst_idx, lst in enumerate(grid):
+        for land_idx, land in enumerate(lst):
+            if land == 1:
+                # left and right
+                if land_idx == 0:
+                    # left side
+                    counter += 1
 
-        visited.add((i, j))
+                    # right side
+                    if lst[land_idx + 1] == 0:
+                        counter += 1
+                elif land_idx == lst_max:
+                    # left side
+                    if lst[land_idx - 1] == 0:
+                        counter += 1
 
-        p = dfs(i, j + 1)
-        p += dfs(i + 1, j)
-        p += dfs(i, j - 1)
-        p += dfs(i - 1, j)
-        return p
+                    # right side
+                    counter += 1
+                else:
+                    # left side
+                    if lst[land_idx - 1] == 0:
+                        counter += 1
 
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j]:
-                return dfs(i, j)
+                    # right side
+                    if lst[land_idx + 1] == 0:
+                        counter += 1
+
+                # top and down
+                if lst_idx == 0:
+                    # top side
+                    counter += 1
+
+                    # bottom side
+                    if grid[lst_idx + 1][land_idx] == 0:
+                        counter += 1
+                elif lst_idx == grid_max:
+                    # top side
+                    if grid[lst_idx - 1][land_idx] == 0:
+                        counter += 1
+
+                    # bottom side
+                    counter += 1
+                else:
+                    # top side
+                    if grid[lst_idx - 1][land_idx] == 0:
+                        counter += 1
+
+                    # bottom side
+                    if grid[lst_idx + 1][land_idx] == 0:
+                        counter += 1
+
+    return counter
